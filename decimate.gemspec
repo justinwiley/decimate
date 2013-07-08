@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Decimate::VERSION
   spec.authors       = ["Justin Wiley"]
   spec.email         = ["justin.wiley+decimate@gmail.com"]
-  spec.description   = %q{Discipline your file-system by selectively securely deleting some of it's precious files or directories.}
+  spec.description   = %q{Discipline your file system by securely delete some of its precious files or directories using shred.}
   spec.summary       = %q{Notable features:
 
  - Endeavors to prevent you from accidentally rm -rfing your root dir

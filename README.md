@@ -1,6 +1,6 @@
 # Decimate
 
-Discipline your file-system by selectively securely deleting some of it's precious files or directories.
+Discipline your file system by securely delete some of its precious files or directories using shred.
 
 ### Notable features:
 
