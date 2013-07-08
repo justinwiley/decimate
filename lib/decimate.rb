@@ -61,7 +61,7 @@ module Decimate
     fail_unless_shred
     validate_path path, opts[:path_must_match]
     
-    stdout = run "find #{path} -type f -execdir #{shred_cmd} '{}' ';'"
+    stdout = run "find #{path} -type f -exec #{shred_cmd} '{}' ';'"
     FileUtils.rm_rf path
     stdout
   end

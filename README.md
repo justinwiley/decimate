@@ -35,7 +35,7 @@ See RDoc for details.
  - The gem shells out to shred.  If shred is not installed, an error will be raised.
  - Since it's shredding files, disk-recovery utilities won't save you if you accidentally delete something.
  - Shred has many limitations, especially on journaling file systems, see the man page.
- - The find command with the -execdir option is used since it's theoretically more secure and may help with race conditions.  Read the man page for security implications around $PATH
+ - The find command is executed with the -exec option instead of -execdir due to issues with some build environments.  This is theoretically less secure.  Read the man page for security implications.
  - Decimate has been tested on Ubuntu Linux.  It won't work on Windows-based systems.
  - Decimate has few scruples, it only tries to prevent you from blowing away the root directory, and whatever regex you provide.  If you tell it to delete /bin/bash, it will do it.
 

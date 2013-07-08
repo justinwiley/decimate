@@ -84,7 +84,7 @@ describe Decimate do
     end
 
     it 'should securely delete all files under the given file' do
-      Open3.should_receive(:capture3).with("find #{dir} -type f -execdir shred -uv '{}' ';'")
+      Open3.should_receive(:capture3).with("find #{dir} -type f -exec shred -uv '{}' ';'")
       Decimate.dir! dir
     end
 
