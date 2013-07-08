@@ -9,6 +9,7 @@ describe Decimate do
   let(:file3) { "#{subdir}/file3.txt"}
   let(:all_files) { [file, file2, file3] }
   let(:all_content) { [dir, subdir] + all_files }
+  let(:stdout) { 'sample stddout' }
 
   shared_context 'existing_files_and_dir' do
     before do
@@ -62,8 +63,8 @@ describe Decimate do
     end
 
     it 'should securely delete the given file' do
-      Decimate.should_receive(:system).with("shred -uv #{file} &> #{Decimate.shred_errs_log}")
-      Decimate.file! file
+      Open3.should_receive(:capture3).with("shred -uv #{file}").and_return([stdout,"",nil])
+      Decimate.file!(file).should == stdout
     end
 
     it 'should result in file being removed' do
@@ -83,7 +84,7 @@ describe Decimate do
     end
 
     it 'should securely delete all files under the given file' do
-      Decimate.should_receive(:system).with("find #{dir} -type f -execdir shred -uv '{}' ';' &> #{Decimate.shred_errs_log}")
+      Open3.should_receive(:capture3).with("find #{dir} -type f -execdir shred -uv '{}' ';'")
       Decimate.dir! dir
     end
 
