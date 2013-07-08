@@ -4,21 +4,20 @@ require 'open3'
 
 module Decimate
   def self.shred_cmd; "shred -uv"; end
-  def self.shred_errs_log; '/tmp/decimate_shred_errs'; end
-
+  #
+  # Executes given command using Open3.capture3
+  # Raises exception if non-zero status call returned, writes to error log
+  # 
   def self.run cmd
     stdout,stderr,status = Open3.capture3 cmd
-    unless status.nil? || status == 0
-      raise "failed #{cmd}"
-      File.open(stred_errs_log){|f| f.write(stdout); f.write(stderr); }
-    end
+    raise "Domination failed: #{cmd}" unless status.nil? || status == 0
     stdout
   end
 
   def self.validate_path path, required_regex=nil
     raise ArgumentError.new("expected Regexp, given #{required_regex.class}") if required_regex && !required_regex.is_a?(Regexp)
     File.expand_path(path).tap do |path|
-      raise ArgumentError.new("It looks like you're trying to remove root dir, got #{path}") if path == '/'
+      raise ArgumentError.new("It looks like you're trying to remove root dir. :( Got #{path}") if path == '/'
       raise ArgumentError.new("Path #{path} does not match #{required_regex}") if required_regex && !path.match(required_regex)
     end
   end
@@ -27,20 +26,39 @@ module Decimate
     raise if `which shred`.chomp.empty?
   end
 
-
+  #
+  # Securely deletes given file using shred.
+  #
+  #  - Returns nil if file does not exist
+  #  - Returns stdout from shred operation if file exists and shredded successfully
+  #  - If optional regex sanity check is included, exception will be raised if match against given path fails
+  #  - Raises if shred or find command triggers any status code other than zero
+  #  - Raises if shred command not found
+  #
   def self.file! path, opts={}
-    fail_unless_shred
     return unless File.exist?(path)
-    raise 'must provide a file' unless File.file?(path)
+    fail_unless_shred
     validate_path path, opts[:path_must_match]
  
     run "#{shred_cmd} #{path}"
   end
 
+  #
+  # Securely deletes given directory recursively using shred.
+  #
+  #  - Returns nil if directory does not exist
+  #  - Returns stdout from shred operation if dir exists and shredded successfully
+  #  - If optional regex sanity check is included, exception will be raised if match against given path fails
+  #  - Raises if shred or find command triggers any status code other than zero
+  #  - Raises if shred command not found
+  #
+  # Usage:
+  # Decimate.dir! 'my-unloved-dirctory'
+  # Decimate.dir! 'my-unloved-dirctory', path_must_match: /unloved/
+  #
   def self.dir! path, opts={}
-    fail_unless_shred
     return unless Dir.exist?(path)
-    raise 'must provide a directory' unless File.directory?(path)
+    fail_unless_shred
     validate_path path, opts[:path_must_match]
     
     stdout = run "find #{path} -type f -execdir #{shred_cmd} '{}' ';'"
