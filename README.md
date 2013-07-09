@@ -1,6 +1,7 @@
 # Decimate
 
 [![Build Status](https://travis-ci.org/justinwiley/decimate.png?branch=master)](https://travis-ci.org/justinwiley/decimate)
+[![Code Climate](https://codeclimate.com/github/justinwiley/decimate.png)](https://codeclimate.com/github/justinwiley/decimate)
 
 Discipline your file system by securely deleting some of its precious files or directories using shred.
 
