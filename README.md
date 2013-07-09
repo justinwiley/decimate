@@ -1,6 +1,6 @@
 # Decimate
 
-[![Build Status](http://api.travis-ci.org/justinwiley/decimate.png)](http://travis-ci.org/justinwiley/decimate)
+[![Build Status](https://travis-ci.org/justinwiley/decimate.png?branch=master)](https://travis-ci.org/justinwiley/decimate)
 
 Discipline your file system by securely deleting some of its precious files or directories using shred.
 
