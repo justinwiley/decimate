@@ -28,8 +28,8 @@ describe Decimate do
     end
 
     it 'should raise if expanded path matches /' do
-      expect{Decimate.validate_path('/')}.to raise_error(ArgumentError)
-      expect{Decimate.validate_path('/dir/../')}.to raise_error(ArgumentError)
+      expect{Decimate.validate_path('/')}.to raise_error
+      expect{Decimate.validate_path('/dir/../')}.to raise_error
     end
     context 'with required path match argument' do
       it 'should return path if expanded path matches given' do
@@ -37,7 +37,7 @@ describe Decimate do
       end
 
       it 'should raise if not' do
-        expect{Decimate.validate_path(file, /another_dir/)}.to raise_error(ArgumentError)
+        expect{Decimate.validate_path(file, /another_dir/)}.to raise_error
       end
     end
   end
@@ -84,7 +84,7 @@ describe Decimate do
     end
 
     it 'should securely delete all files under the given file' do
-      Open3.should_receive(:capture3).with("find #{dir} -type f -exec shred -uv '{}' ';'")
+      Open3.should_receive(:capture3).with("find #{dir} -type f -exec shred -uv {} +")
       Decimate.dir! dir
     end
 

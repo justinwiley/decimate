@@ -1,10 +1,10 @@
 # Decimate
 
-[![Build Status](https://api.travis-ci.org/justinwiley/decimate.png)](http://travis-ci.org/justinwiley/decimate)
+[![Build Status](http://api.travis-ci.org/justinwiley/decimate.png)](http://travis-ci.org/justinwiley/decimate)
 
 Discipline your file system by securely deleting some of its precious files or directories using shred.
 
-### Notable features:
+### Notable features
 
  - Uses shred utility to securely delete files, before removing
  - Allows additional sanity checking of paths
@@ -42,6 +42,11 @@ See RDoc for details.
  - Decimate has few scruples, it only tries to prevent you from blowing away the root directory, and whatever regex you provide.  If you tell it to delete /bin/bash, it will do it.
 
 Code reviews, comments, violent reactions welcome.
+
+Thanks to tokland for suggestions.
+
+http://codereview.stackexchange.com/questions/28265/securely-deleting-files-while-attempting-to-protect-the-user-against-obviously
+
 
 ### Installation
 

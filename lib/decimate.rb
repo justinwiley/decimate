@@ -1,4 +1,5 @@
 require "decimate/version"
+require 'shellwords'
 require 'fileutils'
 require 'open3'
 
@@ -14,11 +15,17 @@ module Decimate
     stdout
   end
 
+  # Check for shred, escape path, ensure path isn't root dir or fails regexp
+  def self.validate path, required_regex=nil
+    fail_unless_shred
+    escaped_path = Shellwords.escape path
+    validate_path escaped_path, required_regex
+  end
+
   def self.validate_path path, required_regex=nil
-    raise ArgumentError.new("expected Regexp, given #{required_regex.class}") if required_regex && !required_regex.is_a?(Regexp)
     File.expand_path(path).tap do |path|
-      raise ArgumentError.new("It looks like you're trying to remove root dir. :( Got #{path}") if path == '/'
-      raise ArgumentError.new("Path #{path} does not match #{required_regex}") if required_regex && !path.match(required_regex)
+      raise "Trying to remove root dir?  Path: #{path}" if path == '/'
+      raise "Path #{path} does not match #{required_regex}" if required_regex && !path.match(required_regex)
     end
   end
 
@@ -37,9 +44,8 @@ module Decimate
   #
   def self.file! path, opts={}
     return unless File.exist?(path)
-    fail_unless_shred
-    validate_path path, opts[:path_must_match]
- 
+    path = validate path, opts[:path_must_match]
+
     run "#{shred_cmd} #{path}"
   end
 
@@ -58,10 +64,9 @@ module Decimate
   #
   def self.dir! path, opts={}
     return unless Dir.exist?(path)
-    fail_unless_shred
-    validate_path path, opts[:path_must_match]
-    
-    stdout = run "find #{path} -type f -exec #{shred_cmd} '{}' ';'"
+    path = validate path, opts[:path_must_match]
+
+    stdout = run "find #{path} -type f -exec #{shred_cmd} {} +"
     FileUtils.rm_rf path
     stdout
   end
