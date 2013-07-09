@@ -63,7 +63,7 @@ describe Decimate do
     end
 
     it 'should securely delete the given file' do
-      Open3.should_receive(:capture3).with("shred -uv #{file}").and_return([stdout,"",nil])
+      Open3.should_receive(:capture3).with("shred -uv #{File.expand_path(file)}").and_return([stdout,"",nil])
       Decimate.file!(file).should == stdout
     end
 
@@ -84,7 +84,7 @@ describe Decimate do
     end
 
     it 'should securely delete all files under the given file' do
-      Open3.should_receive(:capture3).with("find #{dir} -type f -exec shred -uv {} +")
+      Open3.should_receive(:capture3).with("find #{File.expand_path(dir)} -type f -exec shred -uv {} +")
       Decimate.dir! dir
     end
 
