@@ -10,7 +10,7 @@ module Decimate
   # 
   def self.run cmd
     stdout,stderr,status = Open3.capture3 cmd
-    raise "Domination failed executing #{cmd}: stdout: #{stdout}, stderr: #{stderr}, status #{status}" unless status.nil? || status == 0
+    raise "Failed executing #{cmd}: stdout: #{stdout}, stderr: #{stderr}, status #{status}" unless status.nil? || status == 0
     stdout
   end
 
